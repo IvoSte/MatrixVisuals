@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import numpy as np
-
+from agents.agent import Agent
+from food import Food
 
 @dataclass
 class Node:
@@ -20,6 +21,16 @@ class Node:
             self.objects = []
         if obj not in self.objects:
             self.objects.append(obj)
+
+    def get_agents(self):
+        if self.objects is None:
+            return None
+        return (obj for obj in self.objects if isinstance(obj, Agent))
+    
+    def get_food(self):
+        if self.objects is None:
+            return None
+        return (obj for obj in self.objects if isinstance(obj, Food))
 
     def update(self):
         if self.objects is None:

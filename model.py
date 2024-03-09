@@ -1,12 +1,13 @@
 from matrix import Matrix
-from node import Node
-from agent import Agent
-from agent import Grazer
+from agents.agent import Agent
+from agents.agent_types.grazers import Grazer
+from agents.agent_types.slowboys import SlowBoy
 from food import Food
 import numpy as np
 
 N_AGENTS = 0
-N_GRAZERS = 5
+N_GRAZERS = 1
+N_SLOWBOYS = 5
 N_FOOD = 0
 
 
@@ -14,44 +15,13 @@ class Model(object):
     def __init__(self, width, height):
         self.matrix = Matrix(width, height)
         self.init_agents()
-        self.init_grazers()
-        self.agents = self.grazers
         self.init_food()
 
     def init_agents(self):
         self.agents = [
-            *[
-                Agent(
-                    self,
-                    *tuple(np.random.choice(range(self.matrix.x), size=2)),
-                    color=(0, 255, 0),
-                )
-                for _ in range(N_AGENTS)
-            ],
-            *[
-                Agent(
-                    self,
-                    *tuple(np.random.choice(range(self.matrix.x), size=2)),
-                    color=(255, 0, 0),
-                )
-                for _ in range(N_AGENTS)
-            ],
-            *[
-                Agent(
-                    self,
-                    *tuple(np.random.choice(range(self.matrix.x), size=2)),
-                    color=(0, 0, 255),
-                )
-                for _ in range(N_AGENTS)
-            ],
-        ]
-
-    def init_grazers(self):
-        self.grazers = [
-            Grazer(
-                self,
-            )
-            for _ in range(N_GRAZERS)
+            *[Agent.create_random_agent(self) for _ in range(N_AGENTS)],
+            *[Grazer.create_random_agent(self) for _ in range(N_GRAZERS)],
+            *[SlowBoy.create_random_agent(self) for _ in range(N_SLOWBOYS)],
         ]
 
     def init_food(self):
@@ -78,7 +48,6 @@ class Model(object):
         for agent in self.agents:
             agent.update()
             self.matrix.move_agent(agent)
-            self.matrix.set_node_color(agent.x, agent.y, agent.color)
         for food in self.food:
             self.matrix.set_node_color(food.x, food.y, food.color)
         # self.resolve_interactions()

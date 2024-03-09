@@ -1,6 +1,7 @@
 from model import Model
 from display import GridDisplay
 from controller import Controller
+import pygame
 
 DISPLAY_WIDTH = 800
 DISPLAY_HEIGHT = 800
@@ -9,6 +10,7 @@ NODES_Y = 100
 
 
 def main():
+    pygame.init()
 
     model = Model(NODES_X, NODES_Y)
     display = GridDisplay(

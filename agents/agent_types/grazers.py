@@ -1,36 +1,6 @@
 import numpy as np
 from turbocolor import turbo_colormap_data as turbo
-
-TOROIDAL = True
-
-
-class Agent:
-    def __init__(self, model, x, y, color=(255, 255, 255)):
-        self.model = model
-        self.matrix = model.matrix
-        self.x = x
-        self.y = y
-        self.color = color
-
-    def update(self):
-        self.move()
-
-    def move(self, dx=None, dy=None):
-        if dx is None:
-            dx = np.random.choice([-1, 0, 1])
-        if dy is None:
-            dy = np.random.choice([-1, 0, 1])
-
-        if TOROIDAL:
-            self.x = (self.x + dx) % self.matrix.x
-            self.y = (self.y + dy) % self.matrix.y
-        else:
-            self.x = max(0, min(self.matrix.x - 1, self.x + dx))
-            self.y = max(0, min(self.matrix.y - 1, self.y + dy))
-
-    def __str__(self):
-        return f"{type(self)} ({self.x}, {self.y}) with color {self.color} --"
-
+from agents.agent import Agent
 
 class Grazer(Agent):
     def __init__(
@@ -72,6 +42,7 @@ class Grazer(Agent):
             self.energy = 255
         self.energy -= 1
         self.color = self.energy_to_color()
+        self.drop_pheromone()
 
     def chromosome_to_color(self):
         color = [int(turbo[self.energy] * 255) for turbo in self.chromosome]

@@ -3,6 +3,7 @@ from node import Node
 from matrix import Matrix
 from model import Model
 
+BACKGROUND_COLOR = (0,0,0)
 
 class GridDisplay:
     def __init__(
@@ -30,7 +31,9 @@ class GridDisplay:
         self.grid_display = pygame.display.set_mode(
             (self.display_width, self.display_height)
         )
-        pygame.display.get_surface().fill((255, 255, 255))  # background
+        self.font = pygame.font.SysFont("Arial" , 18 , bold = True)
+
+        pygame.display.get_surface().fill(BACKGROUND_COLOR)  # background
 
     def connect_model(self, _model: Model):
         self.model = _model
@@ -59,16 +62,37 @@ class GridDisplay:
             self.node_width // 2,
         )
 
-    def _draw_grid(self, matrix: Matrix):
-        for row in matrix:
-            for item in row:
-                self._draw_square(item.x, item.y, item.color)
+    def _draw_agents(self, matrix: Matrix):
+        # TODO: Find all pheromones that are on the same square
+        # and interpolate the color
+        for item in matrix.pheromones:
+            self._draw_square(item.x, item.y, item.color)
                 # self._draw_circle(item.x, item.y, item.color)
 
+    def _draw_grid(self):
+        for x in range(0, int(self.display_width), int(self.node_width)):
+            pygame.draw.line(self.grid_display, (40, 40, 40), (x, 0), (x, self.display_height))
+        for y in range(0, int(self.display_height), int(self.node_height)):
+            pygame.draw.line(self.grid_display, (40, 40, 40), (0, y), (self.display_width, y))
+
+    def _draw_background(self):
+        self.grid_display.fill(BACKGROUND_COLOR)
+
+    def set_fps_counter(self, fps):
+        self.fps = fps
+
+    def _draw_fps_counter(self):
+        if self.fps:
+            fps_text = self.font.render(f"FPS: {self.fps:.2f}", True, (255, 255, 255))
+            self.grid_display.blit(fps_text, (10, 10))
+
     def reset(self):
-        pygame.display.get_surface().fill((255, 255, 255))
+        pygame.display.get_surface().fill(BACKGROUND_COLOR)
         pygame.display.update()
 
     def update(self):
-        self._draw_grid(self.model.matrix)
+        self._draw_background()
+        self._draw_grid()
+        self._draw_fps_counter()
+        self._draw_agents(self.model.matrix)
         pygame.display.update()

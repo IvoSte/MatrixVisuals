@@ -1,4 +1,5 @@
 from node import Node
+from pheromone import Pheromone
 
 
 class Matrix:
@@ -8,6 +9,7 @@ class Matrix:
         self.y = y
         assert self.x == self.y, "Matrix should be square"
         self.nodes = [[Node(i, j) for j in range(y)] for i in range(x)]
+        self.pheromones: list[Pheromone] = []
 
     def set_node_color(self, x, y, color):
         self.nodes[x][y].color = color
@@ -33,21 +35,11 @@ class Matrix:
         for row in self.nodes:
             print(row)
 
-    def fade_node(self, node, fade_rate):
-        node.color = tuple(int(max(0, c - fade_rate)) for c in node.color)
-
-    def fade_nodes(self, fade_rate):
-        for row in self.nodes:
-            for node in row:
-                self.fade_node(node, fade_rate)
-
-    def brighten_node(self, node, brighten_rate):
-        node.color = tuple(int(min(255, c + brighten_rate)) for c in node.color)
-
-    def brighten_nodes(self, brighten_rate):
-        for row in self.nodes:
-            for node in row:
-                self.brighten_node(node, brighten_rate)
+    def fade_pheromones(self):
+        for pheromone in self.pheromones:
+            pheromone.fade()
+            if pheromone.is_faded():
+                self.pheromones.remove(pheromone)
 
     def move_agent(self, agent):
         self.nodes[agent.x][agent.y].add_object(agent)
@@ -59,5 +51,4 @@ class Matrix:
         for row in self.nodes:
             for node in row:
                 node.update()
-        # self.fade_nodes(1)
-        self.brighten_nodes(1)
+        self.fade_pheromones()
