@@ -7,7 +7,7 @@ TOROIDAL = True
 
 class Agent(Node):
     def __init__(self, model, x, y, color=(255, 255, 255)):
-        super().__init__(x, y, color)
+        super().__init__(model, x, y, color)
 
         self.id = uuid4()
         self.model = model
@@ -19,7 +19,8 @@ class Agent(Node):
         x = np.random.randint(model.width)
         y = np.random.randint(model.height)
         color = tuple(np.random.randint(256, size=3))
-        return cls(model, x, y, color)
+        ag = cls(model, x, y, color)
+        return ag
 
     def drop_pheromone(self):
         # Make sure each agent can only have one pheromone on each tile

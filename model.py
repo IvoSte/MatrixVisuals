@@ -6,9 +6,9 @@ from food import Food
 import numpy as np
 
 N_AGENTS = 0
-N_GRAZERS = 1
+N_GRAZERS = 3
 N_SLOWBOYS = 0
-N_FOOD = 1
+N_FOOD = 200
 
 
 class Model:
@@ -36,6 +36,7 @@ class Model:
             *[Grazer.create_random_agent(self) for _ in range(N_GRAZERS)],
             *[SlowBoy.create_random_agent(self) for _ in range(N_SLOWBOYS)],
         ]
+        
 
         for agent in agents:
             self.matrix.add_node(agent)
@@ -59,30 +60,24 @@ class Model:
         for node_type in list(self.matrix.nodes):
             for node in self.matrix.nodes[node_type]:
                 node.update()
+        self.resolve_interactions()
         self.update_food()
         self.matrix.update()
 
     def resolve_interactions(self):
-        # print("resolving interactions...")
-        # print(self.matrix.nodes)
-        for row in self.matrix.nodes:
-            for node in row:
-                if node.objects != None and len(node.objects) > 1:
-                    agents = [obj for obj in node.objects if isinstance(obj, Agent)]
-                    food = [obj for obj in node.objects if isinstance(obj, Food)]
+        for agents in self.matrix.get_nodes_by_type(Agent):
+            for agent in agents:
+                other_nodes = self.matrix.get_nodes_by_position(agent.x, agent.y)
+                for other in other_nodes:
+                    if agent == other:
+                        continue
+                    if other.__class__ == Food and callable(getattr(other, "eat", None)):
+                        agent.eat(other)
+                        other.get_eaten()
+                    else:
+                        agent.interact(other)
+                        other.interact(agent)
 
-                    for idx, agent in enumerate(agents):
-                        for food_item in food:
-                            agent.eat(food_item)
-                            food_item.get_eaten()
-                            # TODO: Check if this actually removes the food item from the matrix
-                            self.matrix.food.remove(food_item)
-                            # print(f"food interaction: {agent} eats {food_item}")
-                        for other in agents[idx:]:
-                            if agent != other:
-                                agent.interact(other)
-                                other.interact(agent)
-                            # print(f"agent interaction: {agent} interacts with {other}")
 
     def update_food(self):
         if len(self.matrix.food) < N_FOOD:

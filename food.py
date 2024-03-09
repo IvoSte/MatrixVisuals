@@ -5,8 +5,7 @@ class Food(Node):
         super().__init__(model, x, y, color)
 
     def get_eaten(self):
-        self.x = -1
-        self.y = -1
+        self.model.matrix.remove_node(self)
 
     def __str__(self):
         return f"Food ({self.x}, {self.y}) with color {self.color} --"
