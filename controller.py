@@ -15,7 +15,7 @@ class Controller:
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
+                    self.running = False
                     self.quit_simulation()
             self.model.update()
             self.display.set_fps_counter(self.clock.get_fps())
