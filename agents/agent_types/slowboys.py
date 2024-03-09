@@ -15,18 +15,11 @@ class SlowBoy(Agent):
         super().move(dx, dy)
 
     def drop_pheromone(self):
-        # Make sure each agent can only have one pheromone on each tile
-        # NOTE: may be slow, perhaps better to use a set
-        for pheromone in self.model.matrix.pheromones:
-            if pheromone.is_owner(self):
-                self.model.matrix.pheromones.remove(pheromone)
-                break
-
         # Add a new pheromone to the matrix in Von Neumann neighborhood
         for dx in [-1, 0, 1]:
             for dy in [-1, 0, 1]:
                 if abs(dx) + abs(dy) == 1 or (dx == 0 and dy == 0):
-                    self.model.matrix.pheromones.append(
+                    self.model.matrix.add_node(
                         Pheromone(
                             (self.x + dx) % self.matrix.x,
                             (self.y + dy) % self.matrix.y,

@@ -16,8 +16,8 @@ def main():
     display = GridDisplay(
         DISPLAY_WIDTH,
         DISPLAY_HEIGHT,
-        DISPLAY_WIDTH / model.matrix.x,
-        DISPLAY_HEIGHT / model.matrix.y,
+        DISPLAY_WIDTH / model.width,
+        DISPLAY_HEIGHT / model.height,
     )
     display.connect_model(model)
     controller = Controller(model, display)

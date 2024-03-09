@@ -1,8 +1,8 @@
-class Food:
-    def __init__(self, x, y, color=(0, 255, 0)):
-        self.x = x
-        self.y = y
-        self.color = color
+from node import Node
+
+class Food(Node):
+    def __init__(self, model, x, y, color=(0, 255, 0)):
+        super().__init__(model, x, y, color)
 
     def get_eaten(self):
         self.x = -1

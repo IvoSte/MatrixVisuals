@@ -62,11 +62,12 @@ class GridDisplay:
             self.node_width // 2,
         )
 
-    def _draw_agents(self, matrix: Matrix):
+    def _draw_nodes(self, matrix: Matrix):
         # TODO: Find all pheromones that are on the same square
         # and interpolate the color
-        for item in matrix.pheromones:
-            self._draw_square(item.x, item.y, item.color)
+        for object_type in matrix.nodes:
+            for obj in matrix.nodes[object_type]:
+                self._draw_square(obj.x, obj.y, obj.color)
                 # self._draw_circle(item.x, item.y, item.color)
 
     def _draw_grid(self):
@@ -94,5 +95,5 @@ class GridDisplay:
         self._draw_background()
         self._draw_grid()
         self._draw_fps_counter()
-        self._draw_agents(self.model.matrix)
+        self._draw_nodes(self.model.matrix)
         pygame.display.update()

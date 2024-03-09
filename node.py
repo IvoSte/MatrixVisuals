@@ -1,14 +1,13 @@
 from dataclasses import dataclass
 import numpy as np
-from agents.agent import Agent
-from food import Food
+from typing import Any
 
 @dataclass
 class Node:
+    model: Any # Should be of type Model, but gives circular import error (how to fix my god I always get this just for trying to make things nice)
     x: int
     y: int
     color: tuple[int, int, int] = (4, 2, 0)
-    objects: list = None
 
     def set_random_color(self):
         self.color = tuple(np.random.choice(range(256), size=3))
@@ -16,26 +15,11 @@ class Node:
     def set_color(self, color: tuple):
         self.color = color
 
-    def add_object(self, obj):
-        if self.objects is None:
-            self.objects = []
-        if obj not in self.objects:
-            self.objects.append(obj)
-
-    def get_agents(self):
-        if self.objects is None:
-            return None
-        return (obj for obj in self.objects if isinstance(obj, Agent))
-    
-    def get_food(self):
-        if self.objects is None:
-            return None
-        return (obj for obj in self.objects if isinstance(obj, Food))
-
     def update(self):
-        if self.objects is None:
-            return
-        for obj in self.objects:
-            if obj.x != self.x or obj.y != self.y:
-                self.objects.remove(obj)
-        # print(self.objects)
+        pass
+
+    def __str__(self):
+        return f"Node({self.x}, {self.y}, {self.color})"
+    
+    def __repr__(self):
+        return f"Node({self.x}, {self.y}, {self.color})"
