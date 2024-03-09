@@ -65,6 +65,8 @@ class Grazer(Agent):
             if self.energy >= other.energy:
                 other.hgt_receive(self.hgt_send())
                 # self.energy -= other.energy # interesting for dynamics #note
+        elif other.__class__.__name__ == 'Food':
+            self.eat(other)
 
     def eat(self, food):
         if self.x == food.x and self.y == food.y:

@@ -52,6 +52,7 @@ class Matrix:
                 print(f"  {node}")
 
     def fade_pheromones(self):
+        # TODO: this function is incredibly slow
         for pheromone in self.nodes[Pheromone]:
             pheromone.fade()
             if pheromone.is_faded():

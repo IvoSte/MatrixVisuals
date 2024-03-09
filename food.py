@@ -9,3 +9,7 @@ class Food(Node):
 
     def __str__(self):
         return f"Food ({self.x}, {self.y}) with color {self.color} --"
+
+    def interact(self, other: Node):
+        if other.__class__.__name__ == "Grazer":
+            self.get_eaten()

@@ -5,10 +5,10 @@ from agents.agent_types.slowboys import SlowBoy
 from food import Food
 import numpy as np
 
-N_AGENTS = 0
+N_AGENTS = 2
 N_GRAZERS = 3
 N_SLOWBOYS = 0
-N_FOOD = 200
+N_FOOD = 100
 
 
 class Model:
@@ -65,18 +65,13 @@ class Model:
         self.matrix.update()
 
     def resolve_interactions(self):
-        for agents in self.matrix.get_nodes_by_type(Agent):
-            for agent in agents:
-                other_nodes = self.matrix.get_nodes_by_position(agent.x, agent.y)
-                for other in other_nodes:
-                    if agent == other:
-                        continue
-                    if other.__class__ == Food and callable(getattr(other, "eat", None)):
-                        agent.eat(other)
-                        other.get_eaten()
-                    else:
-                        agent.interact(other)
-                        other.interact(agent)
+        for agent in self.matrix.get_nodes_by_type(Agent):
+            other_nodes = self.matrix.get_nodes_by_position(agent.x, agent.y)
+            for other in other_nodes:
+                if agent == other:
+                    continue
+                agent.interact(other)
+                other.interact(agent)
 
 
     def update_food(self):
