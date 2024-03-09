@@ -38,6 +38,7 @@ class GridDisplay:
     def _draw_square(self, x, y, color):
         pygame.draw.rect(
             self.grid_display,
+            # pygame.Color(*color, a=100), --> Need other layer type to change alpha.
             color,
             [
                 x * self.node_width,
@@ -47,10 +48,22 @@ class GridDisplay:
             ],
         )
 
+    def _draw_circle(self, x, y, color):
+        pygame.draw.circle(
+            self.grid_display,
+            color,
+            (
+                x * self.node_width + self.node_width // 2,
+                y * self.node_height + self.node_height // 2,
+            ),
+            self.node_width // 2,
+        )
+
     def _draw_grid(self, matrix: Matrix):
         for row in matrix:
             for item in row:
                 self._draw_square(item.x, item.y, item.color)
+                # self._draw_circle(item.x, item.y, item.color)
 
     def reset(self):
         pygame.display.get_surface().fill((255, 255, 255))

@@ -41,6 +41,14 @@ class Matrix:
             for node in row:
                 self.fade_node(node, fade_rate)
 
+    def brighten_node(self, node, brighten_rate):
+        node.color = tuple(int(min(255, c + brighten_rate)) for c in node.color)
+
+    def brighten_nodes(self, brighten_rate):
+        for row in self.nodes:
+            for node in row:
+                self.brighten_node(node, brighten_rate)
+
     def move_agent(self, agent):
         self.nodes[agent.x][agent.y].add_object(agent)
 
@@ -51,4 +59,5 @@ class Matrix:
         for row in self.nodes:
             for node in row:
                 node.update()
-        self.fade_nodes(1)
+        # self.fade_nodes(1)
+        self.brighten_nodes(1)
