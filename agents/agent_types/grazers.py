@@ -4,9 +4,9 @@ from agents.agent import Agent
 
 class Grazer(Agent):
     def __init__(
-        self, matrix, x=None, y=None, color=(255, 255, 255), chromosome: list = None
+        self, model, x=None, y=None, color=(255, 255, 255), chromosome: list = None
     ):
-        super().__init__(matrix, x, y, color)
+        super().__init__(model, x, y, color)
         self.chromosome = (
             chromosome
             if chromosome is not None
@@ -16,6 +16,15 @@ class Grazer(Agent):
         self.energy = np.random.randint(255)
         self.set_position(x, y)
         self.color = self.energy_to_color()
+        self.fade_rate = 0.5
+
+    @classmethod
+    def create_random_node(cls, model):
+        x = np.random.randint(model.width)
+        y = np.random.randint(model.height)
+        color = tuple(np.random.randint(256, size=3))
+        ag = cls(model, x, y, color)
+        return ag
 
     def set_position(self, x=None, y=None):
         self.x = x if x is not None else np.random.randint(self.matrix.x)
@@ -36,20 +45,20 @@ class Grazer(Agent):
 
     def update(self):
         self.move()
-        if self.energy >= 255:
-            self.energy -= 1
-        if self.energy < 0:
+        if self.energy > 255:
             self.energy = 255
-        self.energy -= 1
+        if self.energy < 0:
+            self.energy = 0
+        self.energy -= 0.5
         self.color = self.energy_to_color()
         self.drop_pheromone()
 
     def chromosome_to_color(self):
-        color = [int(turbo[self.energy] * 255) for turbo in self.chromosome]
+        color = [int(turbo[int(self.energy)] * 255) for turbo in self.chromosome]
         return tuple(color)
 
     def energy_to_color(self):
-        rgb_color = [int(srgb_color * 255) for srgb_color in turbo[self.energy]]
+        rgb_color = [int(srgb_color * 255) for srgb_color in turbo[int(self.energy)]]
         return tuple(rgb_color)
 
     def hgt_send(self):
@@ -70,6 +79,6 @@ class Grazer(Agent):
 
     def eat(self, food):
         if self.x == food.x and self.y == food.y:
-            self.energy += 1
+            self.energy += 150
             return True
         return False

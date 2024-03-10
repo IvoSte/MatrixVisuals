@@ -19,6 +19,14 @@ class Node:
         pass
 
     @classmethod
+    def create_random_node(cls, model):
+        x = np.random.randint(model.width)
+        y = np.random.randint(model.height)
+        color = tuple(np.random.randint(256, size=3))
+        ag = cls(model, x, y, color)
+        return ag
+
+    @classmethod
     def _create_pos_str(cls, x, y):
         return f"({x}, {y})"
 
@@ -31,10 +39,10 @@ class Node:
         return cls._create_pos_str(x, y)
 
     def __str__(self):
-        return f"Node({self.x}, {self.y}, {self.color})"
+        return f"{self.__class__.__name__}({self.x}, {self.y}, {self.color}) -- {self.id}"
     
     def __repr__(self):
-        return f"Node({self.x}, {self.y}, {self.color})"
+        return str(self)
 
     def __eq__(self, other):
         return self.id == other.id

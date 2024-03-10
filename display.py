@@ -1,9 +1,10 @@
 import pygame
-from node import Node
+from pheromone import Pheromone
 from matrix import Matrix
 from model import Model
 
 BACKGROUND_COLOR = (0,0,0)
+# BACKGROUND_COLOR = (255,255,255)
 
 class GridDisplay:
     def __init__(
@@ -67,6 +68,14 @@ class GridDisplay:
         # and interpolate the color
         for object_type in matrix.nodes:
             for obj in matrix.nodes[object_type]:
+                if isinstance(obj, Pheromone):
+                    all_pheromones_on_tile = [x for x in matrix.get_nodes_by_position(obj.x, obj.y) if isinstance(x, Pheromone)]
+                    if len(all_pheromones_on_tile) > 1:
+                        # Interpolate the color
+                        colors = [x.color for x in all_pheromones_on_tile]
+                        color = tuple([sum(x) // len(x) for x in zip(*colors)])
+                        self._draw_square(obj.x, obj.y, color)
+                        continue
                 self._draw_square(obj.x, obj.y, obj.color)
                 # self._draw_circle(item.x, item.y, item.color)
 
@@ -94,6 +103,6 @@ class GridDisplay:
     def update(self):
         self._draw_background()
         self._draw_grid()
-        self._draw_fps_counter()
         self._draw_nodes(self.model.matrix)
+        self._draw_fps_counter()
         pygame.display.update()

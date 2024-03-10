@@ -14,26 +14,24 @@ class Agent(Node):
         self.matrix = model.matrix
         self.fade_rate = 5
 
-    @classmethod
-    def create_random_agent(cls, model):
-        x = np.random.randint(model.width)
-        y = np.random.randint(model.height)
-        color = tuple(np.random.randint(256, size=3))
-        ag = cls(model, x, y, color)
-        return ag
-
     def drop_pheromone(self):
         # Make sure each agent can only have one pheromone on each tile
-        # NOTE: may be slow, perhaps better to use a set
-        # for pheromone in self.model.matrix.pheromones:
-        #     if pheromone.is_owner(self):
-        #         self.model.matrix.pheromones.remove(pheromone)
-        #         break
+        for node in self.model.matrix.get_nodes_by_position(self.x, self.y):
+            if isinstance(node, Pheromone) and node.is_owner(self):
+                self.model.matrix.remove_node(node)
 
         # Add a new pheromone to the matrix
         self.model.matrix.add_node(
             Pheromone(self.model, self.x, self.y, self.id, self.color, self.fade_rate)
         )
+
+    @classmethod
+    def create_random_node(cls, model):
+        x = np.random.randint(model.width)
+        y = np.random.randint(model.height)
+        color = tuple(np.random.randint(256, size=3))
+        ag = cls(model, x, y, color)
+        return ag
 
     def update(self):
         self.move()

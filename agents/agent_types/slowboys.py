@@ -14,6 +14,14 @@ class SlowBoy(Agent):
             dy = np.random.choice([-1, 0, 1], p=[0.005,0.98,0.015])
         super().move(dx, dy)
 
+    @classmethod
+    def create_random_node(cls, model):
+        x = np.random.randint(model.width)
+        y = np.random.randint(model.height)
+        color = tuple(np.random.randint(256, size=3))
+        ag = cls(model, x, y, color)
+        return ag
+
     def drop_pheromone(self):
         # Add a new pheromone to the matrix in Von Neumann neighborhood
         for dx in [-1, 0, 1]:
