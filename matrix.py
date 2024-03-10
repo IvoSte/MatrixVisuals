@@ -37,26 +37,11 @@ class Matrix:
     def __getitem__(self, key):
         return self.get_nodes_by_type(key)
 
-    @property
-    def agents(self):
-        if Agent in self.nodes:
-            return self.nodes[Agent]
-        else: 
-            return []
-
-    @property
-    def pheromones(self):
-        if Pheromone in self.nodes:
-            return self.nodes[Pheromone]
-        else:
-            return []
-    
-    @property
-    def food(self):
-        if Food in self.nodes:
-            return self.nodes[Food]
-        else:
-            return []
+    def is_empty_for_type(self, x, y, node_type):
+        nodes_in_position = self.get_nodes_by_position(x, y)
+        return len(nodes_in_position) == 0 or all(
+            not isinstance(node, node_type) for node in nodes_in_position
+        )
 
     def __print__(self):
         for node_type in self.nodes:

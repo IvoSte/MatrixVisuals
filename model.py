@@ -2,13 +2,15 @@ from matrix import Matrix
 from agents.agent import Agent
 from agents.agent_types.grazers import Grazer
 from agents.agent_types.slowboys import SlowBoy
+from agents.agent_types.flower import Flower
 from food import Food
 import numpy as np
 
 N_AGENTS = 0
-N_GRAZERS = 3
+N_GRAZERS = 2
 N_SLOWBOYS = 0
-N_FOOD = 42
+N_FOOD = 0
+N_FLOWERS = 2
 
 
 class Model:
@@ -25,7 +27,8 @@ class Model:
             *[Agent.create_random_node(self) for _ in range(N_AGENTS)],
             *[Grazer.create_random_node(self) for _ in range(N_GRAZERS)],
             *[SlowBoy.create_random_node(self) for _ in range(N_SLOWBOYS)],
-            *[Food.create_random_node(self) for _ in range(N_FOOD)]
+            *[Food.create_random_node(self) for _ in range(N_FOOD)],
+            *[Flower.create_random_node(self) for _ in range(N_FLOWERS)]
         ]
 
         for node in nodes:
