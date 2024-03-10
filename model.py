@@ -38,10 +38,14 @@ class Model:
         for node_type in list(self.matrix.nodes):
             for node in self.matrix.nodes[node_type]:
                 node.update()
+
+        # TODO: This resolve interactions should be part of the previous loop
         self.resolve_interactions()
         self.matrix.update()
 
     def resolve_interactions(self):
+        # TODO: Fix duplicate interactions
+
         for agent in self.matrix.get_nodes_by_type(Agent):
             other_nodes = self.matrix.get_nodes_by_position(agent.x, agent.y)
             for other in other_nodes:
