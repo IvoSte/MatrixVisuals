@@ -1,13 +1,15 @@
 import numpy as np
 from uuid import uuid4
 
+
 class Node:
-    def __init__(self, model, x, y, color=(4, 2, 0)):
+    def __init__(self, model, x, y, color=(4, 2, 0), opacity=255):
         self.model = model
         self.id = uuid4()
         self.x = x
         self.y = y
         self.color = color
+        self.opacity = opacity
 
     def set_random_color(self):
         self.color = tuple(np.random.choice(range(256), size=3))
@@ -39,8 +41,10 @@ class Node:
         return cls._create_pos_str(x, y)
 
     def __str__(self):
-        return f"{self.__class__.__name__}({self.x}, {self.y}, {self.color}) -- {self.id}"
-    
+        return (
+            f"{self.__class__.__name__}({self.x}, {self.y}, {self.color}) -- {self.id}"
+        )
+
     def __repr__(self):
         return str(self)
 

@@ -1,13 +1,13 @@
 import pygame
-FPS = 144
 
 
 class Controller:
-    def __init__(self, model, display):
+    def __init__(self, model, display, fps):
 
         self.model = model
         self.display = display
         self.running = False
+        self.fps = fps
         self.clock = pygame.time.Clock()
 
     def run(self):
@@ -20,7 +20,7 @@ class Controller:
             self.model.update()
             self.display.set_fps_counter(self.clock.get_fps())
             self.display.update()
-            self.clock.tick(FPS)
+            self.clock.tick(self.fps)
 
     def quit_simulation(self):
         pygame.quit()

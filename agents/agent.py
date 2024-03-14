@@ -5,6 +5,7 @@ from node import Node
 
 TOROIDAL = True
 
+
 class Agent(Node):
     def __init__(self, model, x, y, color=(255, 255, 255)):
         super().__init__(model, x, y, color)
