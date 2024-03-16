@@ -13,11 +13,11 @@ class Agent(Node):
         self.id = uuid4()
         self.model = model
         self.matrix = model.matrix
-        self.fade_rate = 5
+        self.fade_rate = 25
 
     def drop_pheromone(self):
         # Make sure each agent can only have one pheromone on each tile
-        for node in self.model.matrix.get_nodes_by_position(self.x, self.y):
+        for node in list(self.model.matrix.get_nodes_by_position(self.x, self.y)):
             if isinstance(node, Pheromone) and node.is_owner(self):
                 self.model.matrix.remove_node(node)
 

@@ -3,13 +3,16 @@ from uuid import uuid4
 
 
 class Node:
-    def __init__(self, model, x, y, color=(4, 2, 0), opacity=255):
+    def __init__(self, model, x, y, color=(4, 2, 0), opacity=255, update_on_cycle=1):
         self.model = model
         self.id = uuid4()
         self.x = x
         self.y = y
         self.color = color
         self.opacity = opacity
+
+        self.count_cycle = 0
+        self.update_on_cycle = update_on_cycle
 
     def set_random_color(self):
         self.color = tuple(np.random.choice(range(256), size=3))

@@ -5,7 +5,7 @@ from agents.agent import Agent
 class SlowBoy(Agent):
     def __init__(self, model, x, y, color=(255, 255, 255)):
         super().__init__(model, x, y, color)
-        self.fade_rate = 2
+        self.fade_rate = 5
 
     def move(self, dx=None, dy=None):
         if dx is None:

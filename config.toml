@@ -16,7 +16,7 @@ FADE_THRESHOLD = 10
 [display]
 DISPLAY_WIDTH = 800
 DISPLAY_HEIGHT = 800
-FPS = 60
+FPS = 0 # 0 means uncapped FPS
 
 [colors]
 BACKGROUND_COLOR = [0, 0, 0]

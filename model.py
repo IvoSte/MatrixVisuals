@@ -5,6 +5,7 @@ from agents.agent_types.grazers import Grazer
 from agents.agent_types.slowboys import SlowBoy
 from agents.agent_types.flower import Flower
 from agents.agent_types.walker import Walker
+from node import Node
 from food import Food
 import numpy as np
 from agent_factory import AgentFactory
@@ -33,9 +34,8 @@ class Model:
             self.matrix.add_node(node)
 
     def update(self):
-        for node_type in list(self.matrix.nodes_by_type):
-            for node in self.matrix.nodes_by_type[node_type]:
-                node.update()
+        for node in self.matrix.get_nodes_by_type(Node):
+            node.update()
 
         # TODO: This resolve interactions should be part of the previous loop
         self.resolve_interactions()

@@ -1,9 +1,10 @@
 import pygame
-from pheromone import Pheromone
 from matrix import Matrix
 from model import Model
 import numpy as np
-from agents.agent import Agent
+from node import Node
+
+from functools import lru_cache
 
 # BACKGROUND_COLOR = (0, 0, 0)
 # BACKGROUND_COLOR = (255,255,255)
@@ -51,14 +52,16 @@ class GridDisplay:
     def connect_model(self, _model: Model):
         self.model = _model
 
+    @lru_cache(maxsize=256)
+    def cached_screen_position(self, x, y):
+        return (x * self.node_width, y * self.node_height)
+
     def _draw_square(self, x, y, color, opacity=255):
         pygame.draw.rect(
             self.transparent_screen,
-            # pygame.Color(*color, a=100), --> Need other layer type to change alpha.
             (*color, opacity),
             [
-                x * self.node_width,
-                y * self.node_height,
+                *self.cached_screen_position(x, y),
                 self.node_width,
                 self.node_height,
             ],
@@ -79,28 +82,26 @@ class GridDisplay:
         self.background_color = background_color
 
     def _draw_nodes(self, matrix: Matrix):
-        for object_type in matrix.nodes_by_type:
-            for obj in matrix.nodes_by_type[object_type]:
-                if isinstance(obj, Pheromone):
-                    all_pheromones_on_tile = [
-                        x
-                        for x in matrix.get_nodes_by_position(obj.x, obj.y)
-                        if isinstance(x, Pheromone)
-                    ]
-                    if len(all_pheromones_on_tile) > 1:
-                        # Interpolate the color
-                        colors = [x.color for x in all_pheromones_on_tile]
-                        color = tuple([sum(x) // len(x) for x in zip(*colors)])
-                        opacity = max(
-                            all_pheromones_on_tile,
-                            key=lambda x: x.opacity,
-                        ).opacity
-                        self._draw_square(obj.x, obj.y, color, opacity)
-                        continue
-                self._draw_square(obj.x, obj.y, obj.color, obj.opacity)
+        for node in matrix.get_nodes_by_type(Node):
+            # TODO: This is just very slow
+            # if isinstance(obj, Pheromone):
+            #     all_pheromones_on_tile = [
+            #         x
+            #         for x in matrix.get_nodes_by_position(obj.x, obj.y)
+            #         if isinstance(x, Pheromone)
+            #     ]
+            #     if len(all_pheromones_on_tile) > 1:
+            #         # Interpolate the color
+            #         colors = [x.color for x in all_pheromones_on_tile]
+            #         color = tuple([sum(x) // len(x) for x in zip(*colors)])
+            #         opacity = max(
+            #             all_pheromones_on_tile,
+            #             key=lambda x: x.opacity,
+            #         ).opacity
+            #         self._draw_square(obj.x, obj.y, color, opacity)
+            #         continue
+            self._draw_square(node.x, node.y, node.color, node.opacity)
 
-                # if isinstance(obj, Agent):
-                #     self._draw_circle(obj.x, obj.y, obj.color, 150)
 
     def _draw_grid(self):
         for x in range(0, int(self.display_width), int(self.node_width)):
