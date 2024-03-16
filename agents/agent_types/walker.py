@@ -6,7 +6,6 @@ class Walker(Agent):
     def __init__(self, model, x=None, y=None, color=(255, 255, 255)):
         super().__init__(model, x, y, color)
 
-        self.set_position(x, y)
         self.color = color
         self.fade_rate = 0.5
 

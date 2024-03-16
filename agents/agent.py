@@ -13,7 +13,7 @@ class Agent(Node):
         self.id = uuid4()
         self.model = model
         self.matrix = model.matrix
-        self.fade_rate = 25
+        self.fade_rate = 20
 
     def drop_pheromone(self):
         # Make sure each agent can only have one pheromone on each tile

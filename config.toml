@@ -5,18 +5,18 @@ TOROIDAL = true
 
 [agents]
 AGENT = 0
-WALKER = 0
-GRAZER = 0
-LOOPYGRAZER = 5
-SLOWBOY = 0
-FOOD = 0
-FLOWER = 5
+WALKER = 3
+GRAZER = 5
+LOOPYGRAZER = 1
+SLOWBOY = 10
+FOOD = 5
+FLOWER = 10
 FADE_THRESHOLD = 10
 
 [display]
 DISPLAY_WIDTH = 800
 DISPLAY_HEIGHT = 800
-FPS = 0 # 0 means uncapped FPS
+FPS = 60 # 0 means uncapped FPS
 
 [colors]
 BACKGROUND_COLOR = [0, 0, 0]

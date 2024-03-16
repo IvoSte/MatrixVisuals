@@ -16,7 +16,7 @@ class Grazer(Agent):
         self.energy = np.random.randint(255)
         self.set_position(x, y)
         self.color = self.energy_to_color()
-        self.fade_rate = 0.5
+        self.fade_rate = 1
 
     @classmethod
     def create_random_node(cls, model):

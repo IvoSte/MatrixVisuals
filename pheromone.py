@@ -19,13 +19,14 @@ class Pheromone(Node):
         super().__init__(model, x, y, color)
 
         self._color = np.array(color)
+        self.base_color = np.array(color)
         self.id = uuid4()
         self.owner = owner
         self.fade_rate = fade_rate
         self.value = 100
         self.fade_threshold = fade_threshold
 
-        self.update_on_cycle = 5 # Don't execute the update on every cycle, but every 5 cycles
+        self.update_on_cycle = 3 # Don't execute the update on every cycle, but every 5 cycles
 
 
     @property
@@ -37,8 +38,8 @@ class Pheromone(Node):
         self._color = value
 
     def fade(self):
-        self._color = self._color - self.fade_rate
         self.value = self.value - self.fade_rate
+        self._color = self.base_color * (self.value / 100)
         
         # Check if any value is lower than 0, then set it to 0
         self._color = np.maximum(self._color, 0)

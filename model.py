@@ -45,7 +45,7 @@ class Model:
         # TODO: Fix duplicate interactions
 
         for agent in self.matrix.get_nodes_by_type(Agent):
-            other_nodes = self.matrix.get_nodes_by_position(agent.x, agent.y)
+            other_nodes = list(self.matrix.get_nodes_by_position(agent.x, agent.y))
             for other in other_nodes:
                 if agent == other:
                     continue
